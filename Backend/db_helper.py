@@ -3,8 +3,10 @@ from contextlib import contextmanager
 from dotenv import load_dotenv
 from pathlib import Path
 import os
+from Backend import logging_setup
 
 load_dotenv()
+logger = logging_setup.setup_logging("DBHelper")
 
 
 @contextmanager
@@ -23,6 +25,7 @@ def get_db_cursor(commit=False):
     connection.close()
     
 def fetch_expenses_by_date(expense_date):
+    logger.info(f"Fetching expenses for date: {expense_date}")
     with get_db_cursor() as cursor:
         query = "SELECT * FROM expenses WHERE expense_date = %s"
         cursor.execute(query, (expense_date,))
@@ -30,16 +33,19 @@ def fetch_expenses_by_date(expense_date):
         return expenses
 
 def delete_expenses_by_date(expense_date):
+    logger.info(f"Deleting expenses for date: {expense_date}")
     with get_db_cursor(commit = True) as cursor:
         query = "DELETE FROM expenses WHERE expense_date = %s"
         cursor.execute(query, (expense_date,))
         
 def insert_expense(expense_date, amount, category, notes):
+    logger.info(f"Inserting expense: Date: {expense_date}, Amount: {amount}, Category: {category}, Notes: {notes}")
     with get_db_cursor(commit=True) as cursor:
         query = "INSERT INTO expenses (expense_date, amount, category, notes) VALUES (%s, %s, %s, %s)"
         cursor.execute(query, (expense_date, amount, category, notes))
         
 def fetch_expenses_summary(start_date, end_date):
+    logger.info(f"Fetching expenses summary from {start_date} to {end_date}")
     with get_db_cursor() as cursor:
         query = """
             SELECT Category, SUM(amount) AS total_amount
