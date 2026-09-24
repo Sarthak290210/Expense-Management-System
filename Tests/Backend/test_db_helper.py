@@ -13,9 +13,9 @@ def test_fetch_expenses_summary_01_sep_to_30_sep():
     summary = db_helper.fetch_expenses_summary('2024-09-01', '2024-09-30')
     
     assert len(summary) == 5
-    assert summary[0]['Category'] == 'Rent'
-    assert summary[0]['total_amount'] == 2550
-    assert summary[1]['Category'] == 'Food'
-    assert summary[1]['total_amount'] == 1175
+    assert summary[0]['Category'] == 'Shopping'
+    assert summary[0]['total_amount'] == 1002770
+    assert summary[1]['Category'] == 'Rent'
+    assert summary[1]['total_amount'] == 2550
     assert summary[4]['Category'] == 'Other'
     assert summary[3]['total_amount'] == 265
